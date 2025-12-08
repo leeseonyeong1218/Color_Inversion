@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RED CELLOPHANE EXHIBITION</title>
+    <style>
+      :root {
+        --bg-color: #000000;
+        --text-color: #ffffff;
+        --accent-color: #5f1010;
+        --lens-size: 200px;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        font-family: "Helvetica Neue", Arial, sans-serif;
+        overflow-x: hidden;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: default;
+      }
+      header {
+        position: absolute;
+        top: 2rem;
+        text-align: center;
+        width: 100%;
+        z-index: 10;
+        pointer-events: none;
+      }
+      h1 {
+        font-size: 1.5rem;
+        font-weight: 300;
+        letter-spacing: 0.5em;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+        opacity: 0.8;
+      }
+      p.subtitle {
+        font-size: 0.8rem;
+        color: #666;
+        letter-spacing: 0.2em;
+      }
+
+      .gallery-container {
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 2rem;
+        perspective: 1000px;
+      }
+      .card-wrapper {
+        position: relative;
+        width: 22vw;
+        max-width: 280px;
+        aspect-ratio: 9 / 16;
+        border-radius: 8px;
+        overflow: hidden;
+        background-color: #111;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        transform: translateY(100px) rotate(0deg);
+        animation: cardFanIn 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+      }
+      @keyframes cardFanIn {
+        0% {
+          opacity: 0;
+          transform: translateY(100px) scale(0.9) rotate(var(--rot-start));
+        }
+        60% {
+          opacity: 1;
+          transform: translateY(-20px) scale(1.05) rotate(var(--rot-mid));
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0) scale(1) rotate(0deg);
+        }
+      }
+      .card-wrapper:nth-child(1) {
+        --rot-start: -15deg;
+        --rot-mid: -5deg;
+        animation-delay: 0.1s;
+      }
+      .card-wrapper:nth-child(2) {
+        --rot-start: -5deg;
+        --rot-mid: -2deg;
+        animation-delay: 0.2s;
+      }
+      .card-wrapper:nth-child(3) {
+        --rot-start: 5deg;
+        --rot-mid: 2deg;
+        animation-delay: 0.3s;
+      }
+      .card-wrapper:nth-child(4) {
+        --rot-start: 15deg;
+        --rot-mid: 5deg;
+        animation-delay: 0.4s;
+      }
+
+      .card-image,
+      .card-video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        pointer-events: none;
+      }
+      .card-image {
+        z-index: 1;
+      }
+      .card-video {
+        z-index: 2;
+        opacity: 1;
+        clip-path: circle(0px at 50% 50%);
+        filter: contrast(1.2) brightness(1.1);
+      }
+
+      video::-webkit-media-controls {
+        display: none !important;
+      }
+
+      .controls {
+        position: absolute;
+        bottom: 3rem;
+        z-index: 50;
+      }
+      .btn-toggle {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: transparent;
+        border: 2px solid var(--accent-color);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
+      }
+      .btn-toggle:hover {
+        background-color: var(--accent-color);
+      }
+      .btn-inner {
+        width: 20px;
+        height: 20px;
+        background-color: var(--accent-color);
+        border-radius: 50%;
+        transition: transform 0.3s;
+      }
+      .btn-toggle:hover .btn-inner {
+        background-color: #000;
+        transform: scale(1.2);
+      }
+      .btn-toggle.active {
+        background-color: var(--accent-color);
+      }
+      .btn-toggle.active .btn-inner {
+        background-color: #000;
+      }
+      .btn-label {
+        position: absolute;
+        bottom: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.7rem;
+        letter-spacing: 0.2em;
+        color: #666;
+        white-space: nowrap;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      .controls:hover .btn-label {
+        opacity: 1;
+      }
+
+      #lens {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: var(--lens-size);
+        height: var(--lens-size);
+        border-radius: 50%;
+        background-color: rgba(255, 0, 0, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        display: none;
+        box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+        backdrop-filter: contrast(1.2);
+      }
+      body.filter-active {
+        cursor: none;
+      }
+      @media (max-width: 768px) {
+        .gallery-container {
+          flex-direction: column;
+          gap: 1rem;
+          padding-top: 100px;
+          overflow-y: auto;
+          justify-content: flex-start;
+        }
+        .card-wrapper {
+          width: 70vw;
+          opacity: 1;
+          transform: none !important;
+          animation: none;
+        }
+        body {
+          height: auto;
+          min-height: 100vh;
+        }
+        .controls {
+          position: fixed;
+          bottom: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>RED</h1>
+      <p class="subtitle">붉음을 걷어내고, 다른 의미를 확인하세요.</p>
+    </header>
+
+    <div class="gallery-container" id="gallery"></div>
+
+    <div class="controls">
+      <button class="btn-toggle" id="filterBtn" onclick="app.toggleFilter()">
+        <div class="btn-inner"></div>
+      </button>
+      <span class="btn-label">click</span>
+    </div>
+
+    <audio id="bgMusic" src="BB.mp3" loop autoplay preload="auto"></audio>
+
+    <div id="lens"></div>
+
+    <script>
+      const CARDS_DATA = [
+        {
+          id: 1,
+          img: "https://i.imgur.com/zG3QQuT.jpeg",
+          video: "https://i.imgur.com/R2MeP9z.mp4",
+        },
+        {
+          id: 2,
+          img: "https://i.imgur.com/ZyAPfsT.jpeg",
+          video: "https://i.imgur.com/s82Iwbs.mp4",
+        },
+        {
+          id: 3,
+          img: "https://i.imgur.com/LCi6XIE.jpeg",
+          video: "https://i.imgur.com/gaLJMWZ.mp4",
+        },
+        {
+          id: 4,
+          img: "https://i.imgur.com/UVKCRl8.jpeg",
+          video: "https://i.imgur.com/q4rOKBO.mp4",
+        },
+      ];
+
+      const app = {
+        isActive: false,
+        lensSize: 200,
+
+        init: function () {
+          this.renderCards();
+          this.setupMouseTracking();
+          this.initMusic(); // 음악 초기화 실행
+        },
+
+        renderCards: function () {
+          const container = document.getElementById("gallery");
+          let html = "";
+          CARDS_DATA.forEach((card) => {
+            html += `
+              <div class="card-wrapper" id="card-${card.id}">
+                  <img src="${card.img}" class="card-image" alt="Card ${card.id}">
+                  <video src="${card.video}" class="card-video" loop muted playsinline webkit-playsinline></video>
+              </div>
+            `;
+          });
+          container.innerHTML = html;
+        },
+
+        // [핵심] 음악 자동 재생 시도 로직
+        initMusic: function () {
+          const audio = document.getElementById("bgMusic");
+          audio.volume = 0.5;
+
+          // 1. 페이지 로드 즉시 재생 시도
+          const playPromise = audio.play();
+
+          if (playPromise !== undefined) {
+            playPromise.catch((error) => {
+              console.log("브라우저가 자동 재생을 막았습니다. 클릭 대기 중...");
+              // 2. 실패했다면, 사용자가 화면 어디든 '클릭'하는 순간 바로 재생 시작
+              document.addEventListener(
+                "click",
+                () => {
+                  audio.play();
+                },
+                { once: true }
+              ); // 딱 한 번만 실행
+            });
+          }
+        },
+
+        forcePlayVideos: function () {
+          const videos = document.querySelectorAll("video");
+          videos.forEach((vid) => {
+            vid.muted = true;
+            vid.play().catch((e) => {});
+          });
+        },
+
+        toggleFilter: function () {
+          this.isActive = !this.isActive;
+          const btn = document.getElementById("filterBtn");
+          const lens = document.getElementById("lens");
+          const body = document.body;
+
+          if (this.isActive) {
+            btn.classList.add("active");
+            lens.style.display = "block";
+            body.classList.add("filter-active");
+            this.forcePlayVideos();
+          } else {
+            btn.classList.remove("active");
+            lens.style.display = "none";
+            body.classList.remove("filter-active");
+            document.querySelectorAll(".card-video").forEach((video) => {
+              video.style.clipPath = `circle(0px at 0 0)`;
+            });
+          }
+        },
+
+        setupMouseTracking: function () {
+          document.addEventListener("mousemove", (e) => {
+            if (!this.isActive) return;
+            const mx = e.clientX;
+            const my = e.clientY;
+            const lens = document.getElementById("lens");
+            lens.style.left = mx + "px";
+            lens.style.top = my + "px";
+
+            const cards = document.querySelectorAll(".card-wrapper");
+            const radius = this.lensSize / 2;
+            cards.forEach((card) => {
+              const rect = card.getBoundingClientRect();
+              const video = card.querySelector(".card-video");
+              const localX = mx - rect.left;
+              const localY = my - rect.top;
+              video.style.clipPath = `circle(${radius}px at ${localX}px ${localY}px)`;
+            });
+          });
+        },
+      };
+
+      // 페이지 로드 시 앱 실행
+      window.onload = function () {
+        app.init();
+      };
+    </script>
+  </body>
+</html>
