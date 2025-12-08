@@ -3,12 +3,33 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RED CELLOPHANE EXHIBITION</title>
+    <title>RED</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jim+Nightshade&display=swap"
+      rel="stylesheet"
+    />
+
     <style>
+      @font-face {
+        font-family: "MapoGeumbitnaru";
+        src: url("https://gcore.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/MapoGoldenPierA.woff")
+          format("woff");
+        font-weight: normal;
+        font-display: swap;
+      }
+
       :root {
         --bg-color: #000000;
         --text-color: #ffffff;
         --accent-color: #5f1010;
+        
+        /* 라인 색상 */
+        --line-red: #ff0006;
+        --line-blue: #1a3b9e;
+        
         --lens-size: 200px;
       }
       * {
@@ -19,15 +40,26 @@
       body {
         background-color: var(--bg-color);
         color: var(--text-color);
-        font-family: "Helvetica Neue", Arial, sans-serif;
+        font-family: "MapoGeumbitnaru", serif;
         overflow-x: hidden;
+        min-height: 100vh;
+        cursor: default;
+        position: relative;
+      }
+
+      /* === INTRO SECTION === */
+      #intro-section {
         height: 100vh;
+        width: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        cursor: default;
+        position: relative;
+        z-index: 10;
+        background-color: #000;
       }
+
       header {
         position: absolute;
         top: 2rem;
@@ -37,17 +69,21 @@
         pointer-events: none;
       }
       h1 {
-        font-size: 1.5rem;
-        font-weight: 300;
-        letter-spacing: 0.5em;
+        font-family: "Jim Nightshade", cursive;
+        font-size: 4rem;
+        font-weight: 400;
+        letter-spacing: 0.1em;
         text-transform: uppercase;
         margin-bottom: 0.5rem;
-        opacity: 0.8;
+        opacity: 0.9;
+        color: #d8d8d8;
       }
       p.subtitle {
-        font-size: 0.8rem;
-        color: #666;
-        letter-spacing: 0.2em;
+        font-family: "MapoGeumbitnaru", serif;
+        font-size: 1rem;
+        color: #888;
+        letter-spacing: 0.1em;
+        margin-top: -10px;
       }
 
       .gallery-container {
@@ -73,124 +109,319 @@
         animation: cardFanIn 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
       }
       @keyframes cardFanIn {
-        0% {
-          opacity: 0;
-          transform: translateY(100px) scale(0.9) rotate(var(--rot-start));
-        }
-        60% {
-          opacity: 1;
-          transform: translateY(-20px) scale(1.05) rotate(var(--rot-mid));
-        }
-        100% {
-          opacity: 1;
-          transform: translateY(0) scale(1) rotate(0deg);
-        }
+        0% { opacity: 0; transform: translateY(100px) scale(0.9) rotate(var(--rot-start)); }
+        60% { opacity: 1; transform: translateY(-20px) scale(1.05) rotate(var(--rot-mid)); }
+        100% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
       }
-      .card-wrapper:nth-child(1) {
-        --rot-start: -15deg;
-        --rot-mid: -5deg;
-        animation-delay: 0.1s;
-      }
-      .card-wrapper:nth-child(2) {
-        --rot-start: -5deg;
-        --rot-mid: -2deg;
-        animation-delay: 0.2s;
-      }
-      .card-wrapper:nth-child(3) {
-        --rot-start: 5deg;
-        --rot-mid: 2deg;
-        animation-delay: 0.3s;
-      }
-      .card-wrapper:nth-child(4) {
-        --rot-start: 15deg;
-        --rot-mid: 5deg;
-        animation-delay: 0.4s;
-      }
-
-      .card-image,
-      .card-video {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        pointer-events: none;
-      }
+      .card-wrapper:nth-child(1) { --rot-start: -15deg; --rot-mid: -5deg; animation-delay: 0.1s; }
+      .card-wrapper:nth-child(2) { --rot-start: -5deg; --rot-mid: -2deg; animation-delay: 0.2s; }
+      .card-wrapper:nth-child(3) { --rot-start: 5deg; --rot-mid: 2deg; animation-delay: 0.3s; }
+      .card-wrapper:nth-child(4) { --rot-start: 15deg; --rot-mid: 5deg; animation-delay: 0.4s; }
+      
       .card-image {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        object-fit: cover; pointer-events: none;
         z-index: 1;
+        transform: scale(1.02);
+        transform-origin: center;
       }
       .card-video {
-        z-index: 2;
-        opacity: 1;
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        object-fit: cover; pointer-events: none;
+        z-index: 2; opacity: 1;
         clip-path: circle(0px at 50% 50%);
         filter: contrast(1.2) brightness(1.1);
       }
-
-      video::-webkit-media-controls {
-        display: none !important;
-      }
+      video::-webkit-media-controls { display: none !important; }
 
       .controls {
-        position: absolute;
-        bottom: 3rem;
-        z-index: 50;
+        position: absolute; bottom: 3rem; z-index: 50;
       }
       .btn-toggle {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        background-color: transparent;
-        border: 2px solid var(--accent-color);
-        cursor: pointer;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        width: 60px; height: 60px; border-radius: 50%;
+        background-color: transparent; border: 2px solid var(--accent-color);
+        cursor: pointer; transition: all 0.3s ease;
+        display: flex; align-items: center; justify-content: center;
         box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
       }
-      .btn-toggle:hover {
-        background-color: var(--accent-color);
-      }
+      .btn-toggle:hover { background-color: var(--accent-color); }
       .btn-inner {
-        width: 20px;
-        height: 20px;
-        background-color: var(--accent-color);
-        border-radius: 50%;
-        transition: transform 0.3s;
+        width: 20px; height: 20px; background-color: var(--accent-color);
+        border-radius: 50%; transition: transform 0.3s;
       }
-      .btn-toggle:hover .btn-inner {
-        background-color: #000;
-        transform: scale(1.2);
-      }
-      .btn-toggle.active {
-        background-color: var(--accent-color);
-      }
-      .btn-toggle.active .btn-inner {
-        background-color: #000;
-      }
+      .btn-toggle:hover .btn-inner { background-color: #000; transform: scale(1.2); }
+      .btn-toggle.active { background-color: var(--accent-color); }
+      .btn-toggle.active .btn-inner { background-color: #000; }
       .btn-label {
-        position: absolute;
-        bottom: -30px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 0.7rem;
-        letter-spacing: 0.2em;
-        color: #666;
-        white-space: nowrap;
-        opacity: 0;
-        transition: opacity 0.3s;
+        position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%);
+        font-family: "Jim Nightshade", cursive; font-size: 1.5rem;
+        letter-spacing: 0.1em; color: #888; white-space: nowrap;
+        opacity: 0; transition: opacity 0.3s;
       }
-      .controls:hover .btn-label {
+      .controls:hover .btn-label { opacity: 1; }
+
+      /* === SVG PATH BACKGROUND === */
+      #path-container {
+        position: absolute;
+        top: 100vh;
+        left: 0;
+        width: 100%;
+        height: 400vh; /* 스토리 섹션 높이 */
+        z-index: 1;
+        pointer-events: none;
+        overflow: visible;
+
+        -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 5%);
+        mask-image: linear-gradient(to bottom, transparent 0%, black 5%);
+      }
+      
+      #scrollPath {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+
+      /* 라인 스타일 */
+      .cls-1 { stroke: var(--line-red); }
+      .cls-2 { stroke: var(--line-blue); }
+      .cls-1, .cls-2 { 
+        fill: none; 
+        stroke-miterlimit: 10; 
+        stroke-width: 2.5px;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        opacity: 0.6;
+      }
+
+      /* === [NEW] GLOBAL RED DOT === */
+      /* SVG 밖으로 빼서 Z-index 문제를 완벽히 해결 */
+      #global-dot {
+        position: absolute;
+        /* Intro(100vh) + Path(400vh) = 500vh 끝점 */
+        top: 500vh; 
+        left: 50%;
+        width: 10px;  /* 반지름 5px * 2 */
+        height: 10px;
+        background-color: #ff0006;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        
+        /* 가장 중요한 부분: 모든 요소 위에 오도록 설정 */
+        z-index: 9999; 
+        
+        opacity: 0;
+        transition: opacity 0.5s ease;
+        box-shadow: 0 0 10px rgba(255, 0, 6, 0.6); /* 약간의 빛나는 효과 */
+        pointer-events: none;
+      }
+      #global-dot.visible {
         opacity: 1;
       }
 
+      /* === STORY LAYOUT === */
+      .story-section {
+        width: 100%;
+        height: 100vh;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        border: none;
+        background-color: transparent; 
+        z-index: 5; 
+      }
+
+      .story-grid {
+        display: grid;
+        grid-template-columns: 1fr 300px 1fr;
+        width: 90%;
+        max-width: 1200px;
+        height: 80%;
+        align-items: center;
+        position: relative;
+      }
+
+      .text-group {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 1s ease, transform 1s ease;
+        max-width: 300px;
+      }
+
+      .story-section.visible .text-group {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .text-top-left {
+        align-self: start;
+        align-items: flex-end;
+        text-align: right;
+        padding-right: 1rem;
+        margin-top: 5rem;
+        margin-left: auto;
+      }
+
+      .text-bottom-right {
+        align-self: end;
+        align-items: flex-start;
+        text-align: left;
+        padding-left: 1rem;
+        margin-bottom: 5rem;
+        margin-right: auto;
+      }
+
+      .story-title {
+        font-family: "Jim Nightshade", cursive;
+        font-size: 2.5rem;
+        color: #fff;
+        line-height: 1;
+        margin: 0;
+        margin-bottom: 5px;
+      }
+
+      .separator-line {
+        width: 100%;
+        height: 1px;
+        background-color: #fff;
+        margin-bottom: 1rem;
+        opacity: 0.7;
+      }
+
+      .story-subtitle {
+        font-size: 0.9rem;
+        color: #bbb;
+        margin-bottom: 1rem;
+        font-weight: normal;
+        letter-spacing: 0.05em;
+      }
+
+      .story-desc {
+        font-size: 0.85rem;
+        line-height: 1.7;
+        color: #ddd;
+        white-space: pre-line;
+      }
+
+      /* 카드 스택 영역 */
+      .card-stack {
+        position: relative;
+        width: 100%;
+        height: 450px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        perspective: 1000px;
+        cursor: pointer;
+      }
+
+      .story-card {
+        position: absolute;
+        width: 240px;
+        height: 400px;
+        border-radius: 20px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+        border: 1px solid #333;
+        overflow: hidden;
+        transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), z-index 0s, filter 0.6s;
+        background: #000;
+      }
+
+      .story-card img, .story-card video {
+        width: 100%; height: 100%; object-fit: cover;
+      }
+
+      /* === 상태별 카드 스타일 === */
+      .story-section[data-mode="red"] .card-red {
+        z-index: 10; transform: rotate(-3deg) scale(1); filter: brightness(1);
+      }
+      .story-section[data-mode="red"] .card-blue {
+        z-index: 5; transform: rotate(3deg) translate(20px, 20px) scale(0.95); filter: brightness(0.4);
+      }
+
+      .story-section[data-mode="blue"] .card-red {
+        z-index: 5; transform: rotate(-3deg) translate(-20px, 20px) scale(0.95); filter: brightness(0.4);
+      }
+      .story-section[data-mode="blue"] .card-blue {
+        z-index: 10; transform: rotate(3deg) scale(1); filter: brightness(1);
+      }
+
+      /* === CONCLUSION SECTION (결론 텍스트) === */
+      #conclusion-section {
+        width: 100%;
+        min-height: 50vh;
+        position: relative;
+        z-index: 10;
+        background-color: transparent; 
+        text-align: center;
+        
+        /* 점과 텍스트 사이 간격 (80px) */
+        padding-top: 80px; 
+        padding-bottom: 20vh;
+      }
+      
+      .conclusion-text p {
+        font-size: 1.1rem;
+        line-height: 2.6;
+        color: #fff;
+        margin-bottom: 0.5rem;
+        font-weight: 300;
+        letter-spacing: 0.05em;
+        
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 1.2s ease, transform 1.2s ease;
+      }
+
+      /* 순차적 등장 */
+      .conclusion-text.visible p:nth-child(1) {
+        opacity: 1; transform: translateY(0);
+        transition-delay: 0.5s;
+      }
+      .conclusion-text.visible p:nth-child(2) {
+        opacity: 1; transform: translateY(0);
+        transition-delay: 1.8s;
+      }
+      .conclusion-text.visible p:nth-child(3) {
+        opacity: 1; transform: translateY(0);
+        transition-delay: 3.5s;
+      }
+
+      /* 하단 MAIN 링크 스타일 */
+      .footer-link-container {
+        width: 100%;
+        height: 30vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        z-index: 20;
+      }
+      .main-link {
+        font-family: "Jim Nightshade", cursive;
+        font-size: 1.25rem; /* 2.5rem -> 1.25rem (2배 축소) */
+        color: #555;
+        text-decoration: none;
+        letter-spacing: 0.2em;
+        transition: all 0.4s ease;
+        opacity: 0.8;
+      }
+      .main-link:hover {
+        color: #ffffff; /* 빨강 -> 흰색 */
+        transform: scale(1.1);
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); /* 그림자도 흰색으로 변경 */
+        opacity: 1;
+      }
+
+      /* 렌즈 효과 */
       #lens {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: var(--lens-size);
-        height: var(--lens-size);
+        position: fixed; top: 0; left: 0;
+        width: var(--lens-size); height: var(--lens-size);
         border-radius: 50%;
         background-color: rgba(255, 0, 0, 0.4);
         border: 1px solid rgba(255, 255, 255, 0.3);
@@ -201,74 +432,141 @@
         box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
         backdrop-filter: contrast(1.2);
       }
-      body.filter-active {
-        cursor: none;
-      }
-      @media (max-width: 768px) {
-        .gallery-container {
-          flex-direction: column;
+      body.filter-active { cursor: none; }
+
+      @media (max-width: 900px) {
+        .story-grid {
+          grid-template-columns: 1fr;
+          grid-template-rows: auto auto auto;
           gap: 1rem;
-          padding-top: 100px;
-          overflow-y: auto;
-          justify-content: flex-start;
         }
-        .card-wrapper {
-          width: 70vw;
-          opacity: 1;
-          transform: none !important;
-          animation: none;
+        .text-group {
+          align-self: center; align-items: center; text-align: center;
+          padding: 0; margin: 0; max-width: 100%;
         }
-        body {
-          height: auto;
-          min-height: 100vh;
-        }
-        .controls {
-          position: fixed;
-          bottom: 2rem;
-        }
+        .story-desc { text-align: center; }
+        .text-top-left { order: 1; }
+        .card-stack { order: 2; height: 350px; margin: 1rem 0; }
+        .text-bottom-right { order: 3; margin-bottom: 3rem; }
+        .story-card { width: 180px; height: 300px; }
+        #path-container { height: 400vh; } 
       }
     </style>
   </head>
   <body>
-    <header>
-      <h1>RED</h1>
-      <p class="subtitle">붉음을 걷어내고, 다른 의미를 확인하세요.</p>
-    </header>
+    <div id="intro-section">
+      <header>
+        <h1>RED</h1>
+        <p class="subtitle">붉은색을 걷어내고, 다른 의미를 확인하세요.</p>
+      </header>
 
-    <div class="gallery-container" id="gallery"></div>
+      <div class="gallery-container" id="gallery"></div>
 
-    <div class="controls">
-      <button class="btn-toggle" id="filterBtn" onclick="app.toggleFilter()">
-        <div class="btn-inner"></div>
-      </button>
-      <span class="btn-label">click</span>
+      <div class="controls">
+        <button class="btn-toggle" id="filterBtn" onclick="app.toggleFilter()">
+          <div class="btn-inner"></div>
+        </button>
+        <span class="btn-label">click</span>
+      </div>
     </div>
 
-    <audio id="bgMusic" src="BB.mp3" loop autoplay preload="auto"></audio>
+    <div id="path-container">
+      <svg id="scrollPath" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1517.93 5194.74" preserveAspectRatio="none">
+        <path class="cls-1 scroll-draw" d="M127,27.51S1,324.51,1,513.51c0,243,576,630,810,720s567,288,630,486c45.74,143.77-63,378-189,549-60.87,82.61-275.1,327.26-351,414-126,144-432,477-495,567s-180.43,250.23-171,468c9.98,230.47,189,405,315,540s180,243,180,351 Q 758.96 4800 758.96 5000 L 758.96 5194.74"/>
+        <path class="cls-2 scroll-draw" d="M307,.51S23.57,475.74,109,747.51c73.76,234.66,252,378,396,459s405,153,585,207,351,225,378,270,116.05,196.31-45,504c-163.43,312.23-537.61,505.14-719.43,642.23-41.92,31.61-362.4,297.4-495.57,482.77-152.64,212.48-163.37,331.85-135,486,28.57,155.23,135,270,216,351s225,189,342,279,153,180,144,234-45,99-54,117-9,27-9,36,18,18,18,27"/>
+      </svg>
+    </div>
 
+    <div id="global-dot"></div>
+
+    <section class="story-section" id="story-1" data-mode="red"></section>
+    <section class="story-section" id="story-2" data-mode="red"></section>
+    <section class="story-section" id="story-3" data-mode="red"></section>
+    <section class="story-section" id="story-4" data-mode="red"></section>
+
+    <section id="conclusion-section">
+      <div class="conclusion-text">
+        <p>우리는 익숙한 색을 의심하지 않는다.</p>
+        <p>색에 붙은 의미는 자연스럽게 받아들여진다.</p>
+        <p>하지만 다른 시야로 보면, 같은 장면은 다른 이야기가 된다.</p>
+      </div>
+    </section>
+
+    <div class="footer-link-container">
+      <a href="#" class="main-link">MAIN</a>
+    </div>
+
+    <audio id="bgMusic" src="BB.mp3" loop preload="auto"></audio>
     <div id="lens"></div>
 
     <script>
       const CARDS_DATA = [
+        { id: 1, img: "https://i.imgur.com/zG3QQuT.jpeg", video: "https://i.imgur.com/R2MeP9z.mp4" },
+        { id: 2, img: "https://i.imgur.com/ZyAPfsT.jpeg", video: "https://i.imgur.com/s82Iwbs.mp4" },
+        { id: 3, img: "https://i.imgur.com/LCi6XIE.jpeg", video: "https://i.imgur.com/gaLJMWZ.mp4" },
+        { id: 4, img: "https://i.imgur.com/P6N7ywS.jpeg", video: "https://i.imgur.com/q4rOKBO.mp4" },
+      ];
+
+      const STORY_DATA = [
         {
           id: 1,
-          img: "https://i.imgur.com/zG3QQuT.jpeg",
+          img: "https://i.imgur.com/zz1vqrn.jpeg",
           video: "https://i.imgur.com/R2MeP9z.mp4",
+          front: {
+            title: "WARBRINGER",
+            subtitle: "전쟁의 영웅",
+            desc: "로마의 전쟁신 마르스를 비롯해, 고대부터 근대까지 전쟁 깃발·군복·군사 상징에 반복적으로 사용되어왔다.\n\n의미: 용기, 승리와 국가를 위한 희생",
+          },
+          back: {
+            title: "AFTERMATH",
+            subtitle: "전쟁의 상처",
+            desc: "전쟁은 영웅의 이름으로 시작되지만, 끝에 남는 것은 민간인의 죽음과 파괴된 도시, 삶에 남은 회복 불가능한 상처들이다.\n\n의미: 전쟁은 시작의 서사보다, 끝에 남는 결과로 이해되어야 한다.",
+          },
         },
         {
           id: 2,
-          img: "https://i.imgur.com/ZyAPfsT.jpeg",
+          img: "https://i.imgur.com/XGsZB45.jpeg",
           video: "https://i.imgur.com/s82Iwbs.mp4",
+          front: {
+            title: "BRIDE OF LIFE",
+            subtitle: "혼례의 붉음",
+            desc: "인도·네팔 전통 결혼식에서 신부가 입는 붉은 사리와 장신구.\n\n의미: 생명, 다산, 결혼의 축복을 상징하는 색",
+          },
+          back: {
+            title: "MARRIAGE MARKET",
+            subtitle: "거래되는 가치",
+            desc: "붉은 혼례복은 축복의 상징이지만, 동시에 지참금 제도와 매매혼, 여성의 결혼 가치가 거래되는 시장 구조를 가린다.\n\n의미: 붉음은 사랑의 색인 동시에, 여성이 가격화되는 구조를 은폐한다.",
+          },
         },
         {
           id: 3,
-          img: "https://i.imgur.com/LCi6XIE.jpeg",
+          img: "https://i.imgur.com/ApS1EOU.jpeg",
           video: "https://i.imgur.com/gaLJMWZ.mp4",
+          front: {
+            title: "SOVEREIGNTY",
+            subtitle: "권력의 붉음",
+            desc: "로마와 중세 유럽에서 고가의 붉은 염료를 입을 수 있었던 왕족과 지배계층.\n\n의미: 신성한 권력과 정치적 위계의 상징",
+          },
+          back: {
+            title: "EXCLUSION",
+            subtitle: "배제의 표식",
+            desc: "붉은 권위의 색은 모두에게 허락되지 않았으며, 입을 수 있는 자와 없는 자를 명확히 구분하는 장치였다.\n\n의미: 권력은 시각적으로 드러나는 동시에, 접근을 금지하는 표식이 된다.",
+          },
         },
         {
           id: 4,
-          img: "https://i.imgur.com/UVKCRl8.jpeg",
+          img: "https://i.imgur.com/ETE0F4G.jpeg",
           video: "https://i.imgur.com/q4rOKBO.mp4",
+          front: {
+            title: "UPRISING",
+            subtitle: "혁명의 붉음",
+            desc: "공산주의와 노동운동에서 사용된 붉은 깃발과 상징.\n\n의미: 저항과 해방, 기존 질서의 전복을 향한 열망",
+          },
+          back: {
+            title: "PURGE",
+            subtitle: "숙청의 도구",
+            desc: "혁명의 이름으로 사용된 상징은 내부의 적을 가려내고, 폭력과 숙청을 정당화하는 도구로 작동하기도 했다.\n\n의미: 해방의 언어는 또 다른 억압의 언어로 바뀔 수 있다.",
+          },
         },
       ];
 
@@ -277,12 +575,15 @@
         lensSize: 200,
 
         init: function () {
-          this.renderCards();
+          this.renderIntroCards();
+          this.renderStorySections();
           this.setupMouseTracking();
-          this.initMusic(); // 음악 초기화 실행
+          this.initMusic();
+          this.setupScrollObserver();
+          this.initPathDrawing();
         },
 
-        renderCards: function () {
+        renderIntroCards: function () {
           const container = document.getElementById("gallery");
           let html = "";
           CARDS_DATA.forEach((card) => {
@@ -296,31 +597,135 @@
           container.innerHTML = html;
         },
 
-        // [핵심] 음악 자동 재생 시도 로직
+        renderStorySections: function () {
+          STORY_DATA.forEach((story) => {
+            const section = document.getElementById(`story-${story.id}`);
+            section.innerHTML = `
+              <div class="story-grid">
+                <div class="text-group text-top-left">
+                  <h2 class="story-title">${story.front.title}</h2>
+                  <div class="separator-line"></div>
+                  <h3 class="story-subtitle">${story.front.subtitle}</h3>
+                  <p class="story-desc">${story.front.desc}</p>
+                </div>
+                <div class="card-stack" onclick="app.toggleStoryMode(${story.id})">
+                  <div class="story-card card-red">
+                    <img src="${story.img}" alt="Image ${story.id}">
+                  </div>
+                  <div class="story-card card-blue">
+                    <video src="${story.video}" loop muted autoplay playsinline></video>
+                  </div>
+                </div>
+                <div class="text-group text-bottom-right">
+                  <h2 class="story-title">${story.back.title}</h2>
+                  <div class="separator-line"></div>
+                  <h3 class="story-subtitle">${story.back.subtitle}</h3>
+                  <p class="story-desc">${story.back.desc}</p>
+                </div>
+              </div>
+            `;
+          });
+        },
+
+        setupScrollObserver: function () {
+          const observer = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add("visible");
+                }
+              });
+            },
+            { threshold: 0.3 }
+          );
+
+          document.querySelectorAll(".story-section").forEach((section) => {
+            observer.observe(section);
+          });
+          
+          const conclusionObs = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  entry.target.querySelector('.conclusion-text').classList.add("visible");
+                }
+              });
+            }, { threshold: 0.2 }
+          );
+          
+          const concSection = document.getElementById("conclusion-section");
+          if(concSection) conclusionObs.observe(concSection);
+        },
+
+        initPathDrawing: function() {
+          const paths = document.querySelectorAll('.scroll-draw');
+          
+          paths.forEach(path => {
+            const length = path.getTotalLength();
+            path.style.strokeDasharray = length;
+            path.style.strokeDashoffset = length;
+          });
+
+          window.addEventListener('scroll', () => {
+            this.updatePathDrawing(paths);
+          });
+          
+          this.updatePathDrawing(paths);
+        },
+
+        updatePathDrawing: function(paths) {
+          const startTrigger = window.innerHeight; 
+          const scrollHeight = document.body.scrollHeight - window.innerHeight;
+          const scrollTop = window.scrollY;
+          
+          // 라인 드로잉 길이: 400vh
+          const drawSectionHeight = window.innerHeight * 4; 
+          
+          const currentProgress = scrollTop - startTrigger;
+          const scrollBuffer = window.innerHeight * 0.5;
+
+          let progress = (currentProgress + scrollBuffer) / drawSectionHeight;
+          
+          if (progress < 0) progress = 0;
+          if (progress > 1) progress = 1;
+
+          paths.forEach(path => {
+            const length = path.getTotalLength();
+            const drawLength = length * progress;
+            path.style.strokeDashoffset = length - drawLength;
+          });
+
+          // SVG 밖의 점(#global-dot) 제어
+          const dot = document.getElementById('global-dot');
+          if(progress >= 0.99) {
+            dot.classList.add('visible');
+          } else {
+            dot.classList.remove('visible');
+          }
+        },
+
+        toggleStoryMode: function (id) {
+          const section = document.getElementById(`story-${id}`);
+          const currentMode = section.getAttribute("data-mode");
+          section.setAttribute(
+            "data-mode",
+            currentMode === "red" ? "blue" : "red"
+          );
+        },
+
         initMusic: function () {
           const audio = document.getElementById("bgMusic");
           audio.volume = 0.5;
-
-          // 1. 페이지 로드 즉시 재생 시도
           const playPromise = audio.play();
-
           if (playPromise !== undefined) {
             playPromise.catch((error) => {
-              console.log("브라우저가 자동 재생을 막았습니다. 클릭 대기 중...");
-              // 2. 실패했다면, 사용자가 화면 어디든 '클릭'하는 순간 바로 재생 시작
-              document.addEventListener(
-                "click",
-                () => {
-                  audio.play();
-                },
-                { once: true }
-              ); // 딱 한 번만 실행
+              document.addEventListener("click", () => { audio.play(); }, { once: true });
             });
           }
         },
 
         forcePlayVideos: function () {
-          const videos = document.querySelectorAll("video");
+          const videos = document.querySelectorAll("#intro-section video");
           videos.forEach((vid) => {
             vid.muted = true;
             vid.play().catch((e) => {});
@@ -342,9 +747,9 @@
             btn.classList.remove("active");
             lens.style.display = "none";
             body.classList.remove("filter-active");
-            document.querySelectorAll(".card-video").forEach((video) => {
-              video.style.clipPath = `circle(0px at 0 0)`;
-            });
+            document.querySelectorAll("#intro-section .card-video").forEach((video) => {
+                video.style.clipPath = `circle(0px at 0 0)`;
+              });
           }
         },
 
@@ -357,21 +762,28 @@
             lens.style.left = mx + "px";
             lens.style.top = my + "px";
 
-            const cards = document.querySelectorAll(".card-wrapper");
+            const cards = document.querySelectorAll("#intro-section .card-wrapper");
             const radius = this.lensSize / 2;
             cards.forEach((card) => {
               const rect = card.getBoundingClientRect();
               const video = card.querySelector(".card-video");
-              const localX = mx - rect.left;
-              const localY = my - rect.top;
-              video.style.clipPath = `circle(${radius}px at ${localX}px ${localY}px)`;
+              if (rect.top < window.innerHeight && rect.bottom > 0) {
+                const localX = mx - rect.left;
+                const localY = my - rect.top;
+                video.style.clipPath = `circle(${radius}px at ${localX}px ${localY}px)`;
+              }
             });
           });
         },
       };
 
-      // 페이지 로드 시 앱 실행
       window.onload = function () {
+        // 브라우저가 스크롤 위치를 기억하지 못하게 하고 맨 위로 강제 이동
+        if (history.scrollRestoration) {
+          history.scrollRestoration = "manual";
+        }
+        window.scrollTo(0, 0);
+        
         app.init();
       };
     </script>
