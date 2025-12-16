@@ -180,8 +180,9 @@
         animation: cardFanIn 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
       }
 
-      /* 블루 테마 카드 빛나는 효과 제거 */
-      /* body.theme-blue .card-wrapper { box-shadow: 0 0 15px rgba(0, 136, 255, 0.3); } */
+      body.theme-blue .card-wrapper {
+        box-shadow: 0 0 15px rgba(0, 136, 255, 0.3);
+      }
 
       @keyframes cardFanIn {
         0% {
@@ -431,8 +432,9 @@
         z-index: 2;
       }
 
-      /* 블루 테마 카드 빛나는 효과 제거 */
-      /* body.theme-blue .card-right { box-shadow: 0 0 20px rgba(0,136,255,0.3); } */
+      body.theme-blue .card-right {
+        box-shadow: 0 0 20px rgba(0, 136, 255, 0.3);
+      }
 
       .double-card-container:hover .story-card {
         transform: scale(1.02);
@@ -706,6 +708,7 @@
               "https://res.cloudinary.com/ddfjkxjdp/image/upload/v1765871508/Artboard_9_copy_300x-100_cuw9wv.jpg",
             type: "image",
           },
+          // [수정] 4번째 카드 확실하게 영상으로 지정
           {
             id: 4,
             img: "https://i.imgur.com/SRqgT2n.jpeg",
@@ -882,10 +885,11 @@
 
       // === CONCLUSION TEXT DATA ===
       const CONCLUSION_TEXT = {
+        // [수정] 레드 텍스트 수정 (이 장면 -> 같은 장면)
         red: `
           <p>우리가 당연하게 받아들인 색의 의미는 어디에서 왔는가?</p>
           <p>그 의미는 누구에 의해 만들어졌는가?</p>
-          <p>다른 시선으로 본다면, 이 장면은 무엇으로 보일까?</p>
+          <p>다른 시선으로 본다면, 같은 장면은 무엇으로 보일까?</p>
         `,
         blue: `
           <p>우리는 익숙한 색을 의심하지 않는다.</p>
@@ -902,7 +906,7 @@
         init: function () {
           this.renderIntroCards(INTRO_DATA.red);
           this.renderStorySections();
-          this.renderConclusion(); // 초기 결론 텍스트 렌더링
+          this.renderConclusion();
           this.setupMouseTracking();
           this.initMusic();
           this.setupScrollObserver();
@@ -929,7 +933,7 @@
           }
 
           this.renderStorySections();
-          this.renderConclusion(); // 테마 변경 시 결론 텍스트 업데이트
+          this.renderConclusion();
 
           if (this.isActive) {
             this.toggleFilter();
@@ -942,11 +946,9 @@
 
         renderConclusion: function () {
           const container = document.querySelector(".conclusion-text");
-          // 텍스트 교체 (애니메이션 재시작을 위해 클래스 제거 후 다시 추가)
           container.classList.remove("visible");
           container.innerHTML = CONCLUSION_TEXT[this.currentTheme];
 
-          // 약간의 딜레이 후 visible 추가 (스크롤 위치에 있다면)
           setTimeout(() => {
             const rect = document
               .getElementById("conclusion-section")
