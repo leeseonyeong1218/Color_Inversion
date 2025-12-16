@@ -175,14 +175,13 @@
         border-radius: 8px;
         overflow: hidden;
         background-color: #050505;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8); /* 기본 그림자만 유지 */
         border: none;
         animation: cardFanIn 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
       }
 
-      body.theme-blue .card-wrapper {
-        box-shadow: 0 0 15px rgba(0, 136, 255, 0.3);
-      }
+      /* [수정] 블루 테마 카드 빛나는 효과 제거 */
+      /* body.theme-blue .card-wrapper { box-shadow: 0 0 15px rgba(0, 136, 255, 0.3); } */
 
       @keyframes cardFanIn {
         0% {
@@ -432,9 +431,8 @@
         z-index: 2;
       }
 
-      body.theme-blue .card-right {
-        box-shadow: 0 0 20px rgba(0, 136, 255, 0.3);
-      }
+      /* [수정] 블루 테마 카드 빛나는 효과 제거 */
+      /* body.theme-blue .card-right { box-shadow: 0 0 20px rgba(0,136,255,0.3); } */
 
       .double-card-container:hover .story-card {
         transform: scale(1.02);
@@ -708,7 +706,6 @@
               "https://res.cloudinary.com/ddfjkxjdp/image/upload/v1765871508/Artboard_9_copy_300x-100_cuw9wv.jpg",
             type: "image",
           },
-          // [수정] 4번째 카드 확실하게 영상으로 지정
           {
             id: 4,
             img: "https://i.imgur.com/SRqgT2n.jpeg",
@@ -885,7 +882,6 @@
 
       // === CONCLUSION TEXT DATA ===
       const CONCLUSION_TEXT = {
-        // [수정] 레드 텍스트 수정 (이 장면 -> 같은 장면)
         red: `
           <p>우리가 당연하게 받아들인 색의 의미는 어디에서 왔는가?</p>
           <p>그 의미는 누구에 의해 만들어졌는가?</p>
