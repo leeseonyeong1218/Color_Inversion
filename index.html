@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Color_inversion</title>
+    <title>Color_inversion: Red & Blue</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -24,14 +24,35 @@
       :root {
         --bg-color: #000000;
         --text-color: #ffffff;
+
+        /* === RED THEME (Default) === */
+        --theme-color: #ff0006;
         --accent-color: #5f1010;
-        
-        /* 라인 색상 */
+        --lens-color: rgba(255, 0, 0, 0.4);
+        --lens-border: rgba(255, 100, 100, 0.5);
+
         --line-red: #ff0006;
-        --line-blue: #1a3b9e;
-        
+        --line-blue: #0055ff;
+
+        /* SVG 라인 색상 변수 */
+        --svg-color-1: var(--line-red);
+        --svg-color-2: var(--line-blue);
+
         --lens-size: 200px;
       }
+
+      /* === BLUE THEME === */
+      body.theme-blue {
+        --theme-color: #0088ff; /* Electric Blue */
+        --accent-color: #002255;
+        --lens-color: rgba(0, 136, 255, 0.4);
+        --lens-border: rgba(100, 200, 255, 0.6);
+
+        /* SVG 라인 색상 반전 */
+        --svg-color-1: var(--theme-color);
+        --svg-color-2: var(--line-red);
+      }
+
       * {
         box-sizing: border-box;
         margin: 0;
@@ -45,6 +66,7 @@
         min-height: 100vh;
         cursor: default;
         position: relative;
+        transition: background-color 0.5s;
       }
 
       /* === INTRO SECTION === */
@@ -76,150 +98,251 @@
         text-transform: uppercase;
         margin-bottom: 0.5rem;
         opacity: 0.9;
-        color: #d8d8d8;
+        color: #e0e0e0;
+        transition: color 0.5s;
       }
+
+      body.theme-blue h1 {
+        color: #ffffff;
+      }
+      body:not(.theme-blue) h1 {
+        color: #e0e0e0;
+      }
+
       p.subtitle {
         font-family: "MapoGeumbitnaru", serif;
         font-size: 1rem;
         color: #888;
         letter-spacing: 0.1em;
         margin-top: -10px;
+        transition: opacity 0.3s;
+        white-space: pre-line;
+        line-height: 1.5;
       }
 
+      /* Navigation Arrows */
+      .nav-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 60px;
+        height: 60px;
+        cursor: pointer;
+        z-index: 100;
+        opacity: 0.5;
+        transition: opacity 0.3s, transform 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .nav-arrow:hover {
+        opacity: 1;
+        transform: translateY(-50%) scale(1.1);
+      }
+      .nav-arrow svg {
+        width: 40px;
+        height: 40px;
+        fill: #ffffff;
+        filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
+      }
+      .nav-left {
+        left: 2rem;
+      }
+      .nav-right {
+        right: 2rem;
+      }
+
+      /* Gallery Container */
       .gallery-container {
         display: flex;
-        gap: 2rem;
+        gap: 1.5rem;
         align-items: center;
         justify-content: center;
         width: 100%;
         padding: 2rem;
         perspective: 1000px;
+        transition: opacity 0.5s ease;
       }
+      .gallery-container.fade-out {
+        opacity: 0;
+      }
+
       .card-wrapper {
         position: relative;
-        width: 22vw;
-        max-width: 280px;
+        width: 20vw;
+        max-width: 260px;
         aspect-ratio: 9 / 16;
         border-radius: 8px;
         overflow: hidden;
-        background-color: #111;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        opacity: 0;
-        transform: translateY(100px) rotate(0deg);
+        background-color: #050505;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+        border: none;
         animation: cardFanIn 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
       }
+
+      /* 블루 테마 카드 빛나는 효과 제거 */
+      /* body.theme-blue .card-wrapper { box-shadow: 0 0 15px rgba(0, 136, 255, 0.3); } */
+
       @keyframes cardFanIn {
-        0% { opacity: 0; transform: translateY(100px) scale(0.9) rotate(var(--rot-start)); }
-        60% { opacity: 1; transform: translateY(-20px) scale(1.05) rotate(var(--rot-mid)); }
-        100% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+        0% {
+          opacity: 0;
+          transform: translateY(100px) scale(0.9);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
       }
-      .card-wrapper:nth-child(1) { --rot-start: -15deg; --rot-mid: -5deg; animation-delay: 0.1s; }
-      .card-wrapper:nth-child(2) { --rot-start: -5deg; --rot-mid: -2deg; animation-delay: 0.2s; }
-      .card-wrapper:nth-child(3) { --rot-start: 5deg; --rot-mid: 2deg; animation-delay: 0.3s; }
-      .card-wrapper:nth-child(4) { --rot-start: 15deg; --rot-mid: 5deg; animation-delay: 0.4s; }
-      
+
       .card-image {
         position: absolute;
-        top: 0; left: 0; width: 100%; height: 100%;
-        object-fit: cover; pointer-events: none;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        pointer-events: none;
         z-index: 1;
-        transform: scale(1.02);
-        transform-origin: center;
       }
-      .card-video {
-        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-        object-fit: cover; pointer-events: none;
-        z-index: 2; opacity: 1;
-        clip-path: circle(0px at 50% 50%);
-        filter: contrast(1.2) brightness(1.1);
-      }
-      video::-webkit-media-controls { display: none !important; }
 
+      .card-hidden-content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        pointer-events: none;
+        z-index: 5;
+        opacity: 1;
+        clip-path: circle(0px at 50% 50%);
+        filter: contrast(1.1) brightness(1.1);
+        background: #000;
+      }
+      video::-webkit-media-controls {
+        display: none !important;
+      }
+
+      /* Controls */
       .controls {
-        position: absolute; bottom: 3rem; z-index: 50;
+        position: absolute;
+        bottom: 3rem;
+        z-index: 50;
       }
       .btn-toggle {
-        width: 60px; height: 60px; border-radius: 50%;
-        background-color: transparent; border: 2px solid var(--accent-color);
-        cursor: pointer; transition: all 0.3s ease;
-        display: flex; align-items: center; justify-content: center;
-        box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background-color: transparent;
+        border: 2px solid var(--theme-color);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
       }
-      .btn-toggle:hover { background-color: var(--accent-color); }
+      .btn-toggle:hover {
+        background-color: var(--theme-color);
+        box-shadow: 0 0 25px var(--theme-color);
+      }
       .btn-inner {
-        width: 20px; height: 20px; background-color: var(--accent-color);
-        border-radius: 50%; transition: transform 0.3s;
+        width: 24px;
+        height: 24px;
+        background-color: var(--theme-color);
+        border-radius: 50%;
+        transition: transform 0.3s;
       }
-      .btn-toggle:hover .btn-inner { background-color: #000; transform: scale(1.2); }
-      .btn-toggle.active { background-color: var(--accent-color); }
-      .btn-toggle.active .btn-inner { background-color: #000; }
-      .btn-label {
-        position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%);
-        font-family: "Jim Nightshade", cursive; font-size: 1.5rem;
-        letter-spacing: 0.1em; color: #888; white-space: nowrap;
-        opacity: 0; transition: opacity 0.3s;
+      .btn-toggle:hover .btn-inner {
+        background-color: #fff;
+        transform: scale(1.2);
       }
-      .controls:hover .btn-label { opacity: 1; }
+      .btn-toggle.active {
+        background-color: var(--theme-color);
+      }
+      .btn-toggle.active .btn-inner {
+        background-color: #000;
+      }
 
-      /* === SVG PATH BACKGROUND === */
+      .btn-label {
+        position: absolute;
+        bottom: -40px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: "Jim Nightshade", cursive;
+        font-size: 1.5rem;
+        letter-spacing: 0.1em;
+        color: #888;
+        white-space: nowrap;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      .controls:hover .btn-label {
+        opacity: 1;
+      }
+
+      /* === SVG SCROLL PATH === */
       #path-container {
         position: absolute;
         top: 100vh;
         left: 0;
         width: 100%;
-        height: 400vh; /* 스토리 섹션 높이 */
+        height: 400vh;
         z-index: 1;
         pointer-events: none;
         overflow: visible;
-
-        -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 5%);
         mask-image: linear-gradient(to bottom, transparent 0%, black 5%);
+        -webkit-mask-image: linear-gradient(
+          to bottom,
+          transparent 0%,
+          black 5%
+        );
       }
-      
       #scrollPath {
         width: 100%;
         height: 100%;
         overflow: visible;
       }
 
-      /* 라인 스타일 */
-      .cls-1 { stroke: var(--line-red); }
-      .cls-2 { stroke: var(--line-blue); }
-      .cls-1, .cls-2 { 
-        fill: none; 
-        stroke-miterlimit: 10; 
-        stroke-width: 2.5px;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-        opacity: 0.6;
+      .cls-1 {
+        stroke: var(--svg-color-1);
+      }
+      .cls-2 {
+        stroke: var(--svg-color-2);
       }
 
-      /* === [NEW] GLOBAL RED DOT === */
-      /* SVG 밖으로 빼서 Z-index 문제를 완벽히 해결 */
+      .cls-1,
+      .cls-2 {
+        fill: none;
+        stroke-miterlimit: 10;
+        stroke-width: 3px;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        opacity: 0.5;
+        transition: stroke 0.5s ease;
+      }
+
+      /* === GLOBAL DOT === */
       #global-dot {
         position: absolute;
-        /* Intro(100vh) + Path(400vh) = 500vh 끝점 */
-        top: 500vh; 
+        top: 500vh;
         left: 50%;
-        width: 10px;  /* 반지름 5px * 2 */
-        height: 10px;
-        background-color: #ff0006;
+        width: 12px;
+        height: 12px;
+        background-color: var(--theme-color);
         border-radius: 50%;
         transform: translate(-50%, -50%);
-        
-        /* 가장 중요한 부분: 모든 요소 위에 오도록 설정 */
-        z-index: 9999; 
-        
+        z-index: 9999;
         opacity: 0;
-        transition: opacity 0.5s ease;
-        box-shadow: 0 0 10px rgba(255, 0, 6, 0.6); /* 약간의 빛나는 효과 */
+        transition: opacity 0.5s ease, background-color 0.5s;
+        box-shadow: 0 0 15px var(--theme-color);
         pointer-events: none;
       }
       #global-dot.visible {
         opacity: 1;
       }
 
-      /* === STORY LAYOUT === */
+      /* === STORY SECTION (Scroll) === */
       .story-section {
         width: 100%;
         height: 100vh;
@@ -229,17 +352,18 @@
         align-items: center;
         overflow: hidden;
         border: none;
-        background-color: transparent; 
-        z-index: 5; 
+        background-color: transparent;
+        z-index: 5;
       }
 
       .story-grid {
         display: grid;
-        grid-template-columns: 1fr 300px 1fr;
+        grid-template-columns: 1fr 400px;
         width: 90%;
-        max-width: 1200px;
+        max-width: 1400px;
         height: 80%;
         align-items: center;
+        column-gap: 3rem;
         position: relative;
       }
 
@@ -249,150 +373,143 @@
         justify-content: center;
         opacity: 0;
         transform: translateY(30px);
-        transition: opacity 1s ease, transform 1s ease;
-        max-width: 300px;
+        transition: opacity 0.5s ease, transform 0.5s ease;
+        text-align: left;
+        padding: 2rem;
+        background: linear-gradient(
+          90deg,
+          rgba(0, 0, 0, 0) 0%,
+          rgba(0, 0, 0, 0.6) 100%
+        );
       }
-
       .story-section.visible .text-group {
         opacity: 1;
         transform: translateY(0);
       }
 
-      .text-top-left {
-        align-self: start;
-        align-items: flex-end;
-        text-align: right;
-        padding-right: 1rem;
-        margin-top: 5rem;
-        margin-left: auto;
+      .text-group.switching {
+        opacity: 0 !important;
+        transform: translateY(10px) !important;
       }
 
-      .text-bottom-right {
-        align-self: end;
-        align-items: flex-start;
-        text-align: left;
-        padding-left: 1rem;
-        margin-bottom: 5rem;
-        margin-right: auto;
-      }
-
-      .story-title {
-        font-family: "Jim Nightshade", cursive;
-        font-size: 2.5rem;
-        color: #fff;
-        line-height: 1;
-        margin: 0;
-        margin-bottom: 5px;
-      }
-
-      .separator-line {
+      .double-card-container {
+        grid-column: 1;
         width: 100%;
-        height: 1px;
-        background-color: #fff;
-        margin-bottom: 1rem;
-        opacity: 0.7;
-      }
-
-      .story-subtitle {
-        font-size: 0.9rem;
-        color: #bbb;
-        margin-bottom: 1rem;
-        font-weight: normal;
-        letter-spacing: 0.05em;
-      }
-
-      .story-desc {
-        font-size: 0.85rem;
-        line-height: 1.7;
-        color: #ddd;
-        white-space: pre-line;
-      }
-
-      /* 카드 스택 영역 */
-      .card-stack {
-        position: relative;
-        width: 100%;
-        height: 450px;
+        height: 500px;
         display: flex;
         justify-content: center;
         align-items: center;
+        gap: 30px;
         perspective: 1000px;
         cursor: pointer;
       }
 
       .story-card {
-        position: absolute;
-        width: 240px;
-        height: 400px;
-        border-radius: 20px;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
-        border: 1px solid #333;
+        width: 260px;
+        height: 420px;
+        border-radius: 15px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
+        border: none;
         overflow: hidden;
-        transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), z-index 0s, filter 0.6s;
+        position: relative;
         background: #000;
+        transition: transform 0.6s ease, filter 0.6s ease;
+      }
+      .story-card img,
+      .story-card video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
       }
 
-      .story-card img, .story-card video {
-        width: 100%; height: 100%; object-fit: cover;
+      .card-left {
+        transform: rotate(-3deg) translateY(10px);
+        z-index: 2;
+      }
+      .card-right {
+        transform: rotate(3deg) translateY(-10px);
+        z-index: 2;
       }
 
-      /* === 상태별 카드 스타일 === */
-      .story-section[data-mode="red"] .card-red {
-        z-index: 10; transform: rotate(-3deg) scale(1); filter: brightness(1);
-      }
-      .story-section[data-mode="red"] .card-blue {
-        z-index: 5; transform: rotate(3deg) translate(20px, 20px) scale(0.95); filter: brightness(0.4);
+      /* 블루 테마 카드 빛나는 효과 제거 */
+      /* body.theme-blue .card-right { box-shadow: 0 0 20px rgba(0,136,255,0.3); } */
+
+      .double-card-container:hover .story-card {
+        transform: scale(1.02);
       }
 
-      .story-section[data-mode="blue"] .card-red {
-        z-index: 5; transform: rotate(-3deg) translate(-20px, 20px) scale(0.95); filter: brightness(0.4);
+      .story-title {
+        font-family: "Jim Nightshade", cursive;
+        font-size: 2.8rem;
+        color: #fff;
+        line-height: 1;
+        margin-bottom: 10px;
       }
-      .story-section[data-mode="blue"] .card-blue {
-        z-index: 10; transform: rotate(3deg) scale(1); filter: brightness(1);
+      .separator-line {
+        width: 100%;
+        height: 1px;
+        background-color: #fff;
+        margin-bottom: 1.5rem;
+        opacity: 0.7;
+        transition: opacity 0.3s;
       }
 
-      /* === CONCLUSION SECTION (결론 텍스트) === */
+      body.theme-blue .separator-line {
+        opacity: 0;
+      }
+
+      .story-subtitle {
+        font-size: 1rem;
+        color: #ccc;
+        margin-bottom: 1rem;
+        font-weight: normal;
+        letter-spacing: 0.05em;
+      }
+      .story-desc {
+        font-size: 0.95rem;
+        line-height: 1.8;
+        color: #ddd;
+        white-space: pre-line;
+      }
+
+      /* === CONCLUSION SECTION === */
       #conclusion-section {
         width: 100%;
         min-height: 50vh;
         position: relative;
         z-index: 10;
-        background-color: transparent; 
+        background-color: transparent;
         text-align: center;
-        
-        /* 점과 텍스트 사이 간격 (80px) */
-        padding-top: 80px; 
+        padding-top: 100px;
         padding-bottom: 20vh;
       }
-      
       .conclusion-text p {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
         line-height: 2.6;
         color: #fff;
         margin-bottom: 0.5rem;
         font-weight: 300;
         letter-spacing: 0.05em;
-        
         opacity: 0;
         transform: translateY(30px);
         transition: opacity 1.2s ease, transform 1.2s ease;
       }
-
-      /* 순차적 등장 */
       .conclusion-text.visible p:nth-child(1) {
-        opacity: 1; transform: translateY(0);
+        opacity: 1;
+        transform: translateY(0);
         transition-delay: 0.5s;
       }
       .conclusion-text.visible p:nth-child(2) {
-        opacity: 1; transform: translateY(0);
+        opacity: 1;
+        transform: translateY(0);
         transition-delay: 1.8s;
       }
       .conclusion-text.visible p:nth-child(3) {
-        opacity: 1; transform: translateY(0);
+        opacity: 1;
+        transform: translateY(0);
         transition-delay: 3.5s;
       }
 
-      /* 하단 MAIN 링크 스타일 */
       .footer-link-container {
         width: 100%;
         height: 30vh;
@@ -404,7 +521,7 @@
       }
       .main-link {
         font-family: "Jim Nightshade", cursive;
-        font-size: 1.25rem; /* 2.5rem -> 1.25rem (2배 축소) */
+        font-size: 1.5rem;
         color: #555;
         text-decoration: none;
         letter-spacing: 0.2em;
@@ -412,53 +529,83 @@
         opacity: 0.8;
       }
       .main-link:hover {
-        color: #ffffff; /* 빨강 -> 흰색 */
+        color: #ffffff;
         transform: scale(1.1);
-        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); /* 그림자도 흰색으로 변경 */
+        text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
         opacity: 1;
       }
 
-      /* 렌즈 효과 */
+      /* === Lens Effect === */
       #lens {
-        position: fixed; top: 0; left: 0;
-        width: var(--lens-size); height: var(--lens-size);
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: var(--lens-size);
+        height: var(--lens-size);
         border-radius: 50%;
-        background-color: rgba(255, 0, 0, 0.4);
-        border: 1px solid rgba(255, 255, 255, 0.3);
+        background-color: var(--lens-color);
+        border: 2px solid var(--lens-border);
         pointer-events: none;
         z-index: 9999;
         transform: translate(-50%, -50%);
         display: none;
-        box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
-        backdrop-filter: contrast(1.2);
+        box-shadow: 0 0 40px var(--lens-color);
+        backdrop-filter: blur(2px) contrast(1.2);
+        transition: background-color 0.5s, border-color 0.5s, box-shadow 0.5s;
       }
-      body.filter-active { cursor: none; }
+      body.filter-active {
+        cursor: none;
+      }
 
+      /* Mobile */
       @media (max-width: 900px) {
         .story-grid {
           grid-template-columns: 1fr;
-          grid-template-rows: auto auto auto;
-          gap: 1rem;
+          grid-template-rows: auto auto;
+          gap: 2rem;
+        }
+        .double-card-container {
+          height: 350px;
+          gap: 15px;
+        }
+        .story-card {
+          width: 160px;
+          height: 280px;
         }
         .text-group {
-          align-self: center; align-items: center; text-align: center;
-          padding: 0; margin: 0; max-width: 100%;
+          padding: 1rem;
+          text-align: center;
         }
-        .story-desc { text-align: center; }
-        .text-top-left { order: 1; }
-        .card-stack { order: 2; height: 350px; margin: 1rem 0; }
-        .text-bottom-right { order: 3; margin-bottom: 3rem; }
-        .story-card { width: 180px; height: 300px; }
-        #path-container { height: 400vh; } 
       }
     </style>
   </head>
   <body>
     <div id="intro-section">
       <header>
-        <h1>Red</h1>
-        <p class="subtitle">붉은색을 걷어내고, 다른 의미를 확인하세요.</p>
+        <h1 id="main-title">Red</h1>
+        <p class="subtitle" id="main-subtitle">
+          하단 버튼을 눌러 빨간색을 제거하세요.
+        </p>
       </header>
+
+      <div
+        class="nav-arrow nav-left"
+        onclick="app.switchTheme('red')"
+        title="Go to Red Theme"
+      >
+        <svg viewBox="0 0 24 24">
+          <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+        </svg>
+      </div>
+      <div
+        class="nav-arrow nav-right"
+        onclick="app.switchTheme('blue')"
+        title="Go to Blue Theme"
+      >
+        <svg viewBox="0 0 24 24">
+          <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+        </svg>
+      </div>
 
       <div class="gallery-container" id="gallery"></div>
 
@@ -471,160 +618,442 @@
     </div>
 
     <div id="path-container">
-      <svg id="scrollPath" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1517.93 5194.74" preserveAspectRatio="none">
-        <path class="cls-1 scroll-draw" d="M127,27.51S1,324.51,1,513.51c0,243,576,630,810,720s567,288,630,486c45.74,143.77-63,378-189,549-60.87,82.61-275.1,327.26-351,414-126,144-432,477-495,567s-180.43,250.23-171,468c9.98,230.47,189,405,315,540s180,243,180,351 Q 758.96 4800 758.96 5000 L 758.96 5194.74"/>
-        <path class="cls-2 scroll-draw" d="M307,.51S23.57,475.74,109,747.51c73.76,234.66,252,378,396,459s405,153,585,207,351,225,378,270,116.05,196.31-45,504c-163.43,312.23-537.61,505.14-719.43,642.23-41.92,31.61-362.4,297.4-495.57,482.77-152.64,212.48-163.37,331.85-135,486,28.57,155.23,135,270,216,351s225,189,342,279,153,180,144,234-45,99-54,117-9,27-9,36,18,18,18,27"/>
+      <svg
+        id="scrollPath"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 1517.93 5194.74"
+        preserveAspectRatio="none"
+      >
+        <path
+          class="cls-1 scroll-draw"
+          d="M127,27.51S1,324.51,1,513.51c0,243,576,630,810,720s567,288,630,486c45.74,143.77-63,378-189,549-60.87,82.61-275.1,327.26-351,414-126,144-432,477-495,567s-180.43,250.23-171,468c9.98,230.47,189,405,315,540s180,243,180,351 Q 758.96 4800 758.96 5000 L 758.96 5194.74"
+        />
+        <path
+          class="cls-2 scroll-draw"
+          d="M307,.51S23.57,475.74,109,747.51c73.76,234.66,252,378,396,459s405,153,585,207,351,225,378,270,116.05,196.31-45,504c-163.43,312.23-537.61,505.14-719.43,642.23-41.92,31.61-362.4,297.4-495.57,482.77-152.64,212.48-163.37,331.85-135,486,28.57,155.23,135,270,216,351s225,189,342,279,153,180,144,234-45,99-54,117-9,27-9,36,18,18,18,27"
+        />
       </svg>
     </div>
 
     <div id="global-dot"></div>
 
-    <section class="story-section" id="story-1" data-mode="red"></section>
-    <section class="story-section" id="story-2" data-mode="red"></section>
-    <section class="story-section" id="story-3" data-mode="red"></section>
-    <section class="story-section" id="story-4" data-mode="red"></section>
+    <section class="story-section" id="story-1"></section>
+    <section class="story-section" id="story-2"></section>
+    <section class="story-section" id="story-3"></section>
+    <section class="story-section" id="story-4"></section>
 
     <section id="conclusion-section">
-      <div class="conclusion-text">
-        <p>우리는 익숙한 색을 의심하지 않는다.</p>
-        <p>색에 붙은 의미는 자연스럽게 받아들여진다.</p>
-        <p>하지만 다른 시야로 보면, 같은 장면은 다른 이야기가 된다.</p>
-      </div>
+      <div class="conclusion-text"></div>
     </section>
 
     <div class="footer-link-container">
-      <a href="https://wonwonwonwonwon.github.io/color-/" class="main-link">Color:</a>
+      <a href="https://wonwonwonwonwon.github.io/color-/" class="main-link"
+        >Color:</a
+      >
     </div>
 
     <audio id="bgMusic" src="BB.mp3" loop preload="auto"></audio>
     <div id="lens"></div>
 
     <script>
-      const CARDS_DATA = [
-        { id: 1, img: "https://i.imgur.com/zG3QQuT.jpeg", video: "https://i.imgur.com/R2MeP9z.mp4" },
-        { id: 2, img: "https://i.imgur.com/ZyAPfsT.jpeg", video: "https://i.imgur.com/s82Iwbs.mp4" },
-        { id: 3, img: "https://i.imgur.com/LCi6XIE.jpeg", video: "https://i.imgur.com/gaLJMWZ.mp4" },
-        { id: 4, img: "https://i.imgur.com/P6N7ywS.jpeg", video: "https://i.imgur.com/q4rOKBO.mp4" },
-      ];
+      // === INTRO DATA ===
+      const INTRO_DATA = {
+        red: [
+          {
+            id: 1,
+            img: "https://i.imgur.com/zG3QQuT.jpeg",
+            content: "https://i.imgur.com/R2MeP9z.mp4",
+            type: "video",
+          },
+          {
+            id: 2,
+            img: "https://i.imgur.com/ZyAPfsT.jpeg",
+            content: "https://i.imgur.com/s82Iwbs.mp4",
+            type: "video",
+          },
+          {
+            id: 3,
+            img: "https://i.imgur.com/LCi6XIE.jpeg",
+            content: "https://i.imgur.com/gaLJMWZ.mp4",
+            type: "video",
+          },
+          {
+            id: 4,
+            img: "https://i.imgur.com/P6N7ywS.jpeg",
+            content: "https://i.imgur.com/q4rOKBO.mp4",
+            type: "video",
+          },
+        ],
+        blue: [
+          {
+            id: 1,
+            img: "https://i.imgur.com/lcArsbN.jpeg",
+            content:
+              "https://res.cloudinary.com/ddfjkxjdp/video/upload/v1765871356/01_wpptll.mp4",
+            type: "video",
+          },
+          {
+            id: 2,
+            img: "https://i.imgur.com/kT7pUYJ.jpeg",
+            content:
+              "https://res.cloudinary.com/ddfjkxjdp/video/upload/v1765871355/03_qqo8av.mp4",
+            type: "video",
+          },
+          {
+            id: 3,
+            img: "https://i.imgur.com/GLvv2kK.jpeg",
+            content:
+              "https://res.cloudinary.com/ddfjkxjdp/image/upload/v1765871508/Artboard_9_copy_300x-100_cuw9wv.jpg",
+            type: "image",
+          },
+          {
+            id: 4,
+            img: "https://i.imgur.com/SRqgT2n.jpeg",
+            content:
+              "https://res.cloudinary.com/ddfjkxjdp/video/upload/v1765871363/04_n63dfh.mp4",
+            type: "video",
+          },
+        ],
+      };
 
-      const STORY_DATA = [
-        {
-          id: 1,
-          img: "https://i.imgur.com/zz1vqrn.jpeg",
-          video: "https://i.imgur.com/R2MeP9z.mp4",
-          front: {
-            title: "WARBRINGER",
-            subtitle: "전쟁의 영웅",
-            desc: "고대 로마의 전쟁신 마르스를 비롯해, 붉은색은 전쟁 깃발·군복·훈장 등 군사 상징에 반복적으로 사용되어 왔다. 피와 생명을 연상시키는 색은 용기와 공격성, 국가를 위한 희생을 시각적으로 정당화했다.\n\n의미: 영웅, 희생, 승리",
+      // === STORY RESOURCES ===
+      const STORY_RESOURCES = {
+        red: [
+          {
+            leftImg: "https://i.imgur.com/zz1vqrn.jpeg",
+            rightContent: "https://i.imgur.com/R2MeP9z.mp4",
+            rightType: "video",
           },
-          back: {
-            title: "AFTERMATH",
-            subtitle: "전쟁의 상처",
-            desc: "전쟁의 서사는 영웅으로 시작되지만, 끝에 남는 것은 민간인의 죽음과 파괴된 도시, 사회에 남은 회복 불가능한 상흔이다.\n\n의미: 죽음, 파괴, 결과",
+          {
+            leftImg: "https://i.imgur.com/XGsZB45.jpeg",
+            rightContent: "https://i.imgur.com/s82Iwbs.mp4",
+            type: "video",
           },
-        },
-        {
-          id: 2,
-          img: "https://i.imgur.com/XGsZB45.jpeg",
-          video: "https://i.imgur.com/s82Iwbs.mp4",
-          front: {
-            title: "BRIDE OF LIFE",
-            subtitle: "혼례의 붉음",
-            desc: "인도·네팔 전통 결혼식에서 붉은 사리와 장신구는 생명과 다산, 공동체의 축복을 상징한다. 붉은색은 결혼을 개인의 선택이 아닌 사회적 의례로 고정해왔다.\n\n의미: 생명, 축복, 결합",
+          {
+            leftImg: "https://i.imgur.com/ApS1EOU.jpeg",
+            rightContent: "https://i.imgur.com/gaLJMWZ.mp4",
+            rightType: "video",
           },
-          back: {
-            title: "MARRIAGE MARKET",
-            subtitle: "거래되는 가치",
-            desc: "붉은 혼례복은 생명과 축복의 상징으로 소비되지만, 동시에 지참금 제도와 매매혼 구조를 가린다. 결혼은 감정의 결합이 아니라, 여성의 가치가 교환되는 사회적 계약으로 작동해왔다.\n\n의미: 교환, 가격, 구조",
+          {
+            leftImg: "https://i.imgur.com/ETE0F4G.jpeg",
+            rightContent: "https://i.imgur.com/q4rOKBO.mp4",
+            rightType: "video",
           },
-        },
-        {
-          id: 3,
-          img: "https://i.imgur.com/ApS1EOU.jpeg",
-          video: "https://i.imgur.com/gaLJMWZ.mp4",
-          front: {
-            title: "SOVEREIGNTY",
-            subtitle: "혁명의 깃발",
-            desc: "근대 사회주의·공산주의 운동에서 붉은 깃발은 저항과 해방, 집단적 연대를 상징했다. 색은 변화를 향한 열망을 시각화했다.\n\n의미: 저항, 연대, 해방",
+        ],
+        blue: [
+          {
+            leftImg: "https://i.imgur.com/VjHax21.jpeg",
+            rightContent:
+              "https://res.cloudinary.com/ddfjkxjdp/video/upload/v1765871356/01_wpptll.mp4",
+            rightType: "video",
           },
-          back: {
-            title: "EXCLUSION",
-            subtitle: "혁명의 정당화",
-            desc: "혁명의 상징은 내부의 적을 가려내는 기준으로 쓰이기도 했다. 해방의 언어는 폭력과 숙청을 정당화했다.\n\n의미: 폭력, 숙청, 정당화",
+          {
+            leftImg: "https://i.imgur.com/v2fwr2o.jpeg",
+            rightContent:
+              "https://res.cloudinary.com/ddfjkxjdp/video/upload/v1765871355/03_qqo8av.mp4",
+            rightType: "video",
           },
-        },
-        {
-          id: 4,
-          img: "https://i.imgur.com/ETE0F4G.jpeg",
-          video: "https://i.imgur.com/q4rOKBO.mp4",
-          front: {
-            title: "UPRISING",
-            subtitle: "권력의 색",
-            desc: "로마와 중세 유럽에서 붉은 염료는 왕족과 지배계층만 사용할 수 있었다. 붉은 옷은 정치적 권력과 위계를 시각적으로 고정했다.\n\n의미: 권위, 지배, 위계",
+          {
+            leftImg: "https://i.imgur.com/vKvhdyj.jpeg",
+            rightContent:
+              "https://res.cloudinary.com/ddfjkxjdp/image/upload/v1765871508/Artboard_9_copy_300x-100_cuw9wv.jpg",
+            rightType: "image",
           },
-          back: {
-            title: "PURGE",
-            subtitle: "접근의 제한",
-            desc: "붉은 권위의 색은 입을 수 있는 자와 없는 자를 구분했다. 색은 권력을 드러내는 동시에 배제의 기준이 되었다.\n\n의미: 배제, 경계, 통제",
+          {
+            leftImg: "https://i.imgur.com/ompCS1x.jpeg",
+            rightContent:
+              "https://res.cloudinary.com/ddfjkxjdp/video/upload/v1765871363/04_n63dfh.mp4",
+            rightType: "video",
           },
-        },
-      ];
+        ],
+      };
+
+      // === STORY TEXT ===
+      const STORY_TEXT = {
+        red: [
+          {
+            id: 1,
+            front: {
+              title: "WARBRINGER",
+              subtitle: "전쟁의 영웅",
+              desc: "고대 로마의 전쟁신 마르스를 비롯해, 붉은색은 전쟁 깃발·군복·훈장 등 군사 상징에 반복적으로 사용되어 왔다. 피와 생명을 연상시키는 색은 용기와 공격성, 국가를 위한 희생을 시각적으로 정당화했다.\n\n의미: 영웅, 희생, 승리",
+            },
+            back: {
+              title: "AFTERMATH",
+              subtitle: "전쟁의 상처",
+              desc: "전쟁의 서사는 영웅으로 시작되지만, 끝에 남는 것은 민간인의 죽음과 파괴된 도시, 사회에 남은 회복 불가능한 상흔이다.\n\n의미: 죽음, 파괴, 결과",
+            },
+          },
+          {
+            id: 2,
+            front: {
+              title: "BRIDE OF LIFE",
+              subtitle: "혼례의 붉음",
+              desc: "인도·네팔 전통 결혼식에서 붉은 사리와 장신구는 생명과 다산, 공동체의 축복을 상징한다. 붉은색은 결혼을 개인의 선택이 아닌 사회적 의례로 고정해왔다.\n\n의미: 생명, 축복, 결합",
+            },
+            back: {
+              title: "MARRIAGE MARKET",
+              subtitle: "거래되는 가치",
+              desc: "붉은 혼례복은 생명과 축복의 상징으로 소비되지만, 동시에 지참금 제도와 매매혼 구조를 가린다. 결혼은 감정의 결합이 아니라, 여성의 가치가 교환되는 사회적 계약으로 작동해왔다.\n\n의미: 교환, 가격, 구조",
+            },
+          },
+          {
+            id: 3,
+            front: {
+              title: "SOVEREIGNTY",
+              subtitle: "혁명의 깃발",
+              desc: "근대 사회주의·공산주의 운동에서 붉은 깃발은 저항과 해방, 집단적 연대를 상징했다. 색은 변화를 향한 열망을 시각화했다.\n\n의미: 저항, 연대, 해방",
+            },
+            back: {
+              title: "EXCLUSION",
+              subtitle: "혁명의 정당화",
+              desc: "혁명의 상징은 내부의 적을 가려내는 기준으로 쓰이기도 했다. 해방의 언어는 폭력과 숙청을 정당화했다.\n\n의미: 폭력, 숙청, 정당화",
+            },
+          },
+          {
+            id: 4,
+            front: {
+              title: "UPRISING",
+              subtitle: "권력의 색",
+              desc: "로마와 중세 유럽에서 붉은 염료는 왕족과 지배계층만 사용할 수 있었다. 붉은 옷은 정치적 권력과 위계를 시각적으로 고정했다.\n\n의미: 권위, 지배, 위계",
+            },
+            back: {
+              title: "PURGE",
+              subtitle: "접근의 제한",
+              desc: "붉은 권위의 색은 입을 수 있는 자와 없는 자를 구분했다. 색은 권력을 드러내는 동시에 배제의 기준이 되었다.\n\n의미: 배제, 경계, 통제",
+            },
+          },
+        ],
+        blue: [
+          {
+            id: 1,
+            front: {
+              title: "DEVOTION",
+              subtitle: "신성의 파랑",
+              desc: "중세 기독교 회화에서 성모 마리아의 망토에 사용된 푸른 안료, 울트라마린은 라피스 라줄리에서 추출된 희귀한 색이었다.\n이 안료는 금보다 비쌀 정도로 값비쌌으며, 장거리 교역을 통해서만 유럽에 도달할 수 있었다.\n그 결과 울트라마린은 성모 마리아와 같은 가장 신성한 존재에게만 허락된 색으로 사용되었다.\n\n의미: 헌신, 신성함, 순결, 영적 보호",
+            },
+            back: {
+              title: "PRIVILEGE",
+              subtitle: "신성의 사유화",
+              desc: "푸른색 안료는 극도로 값비싼 재료였고, 오직 교회와 권력자만이 신성을 시각화할 수 있었다.\n\n의미: 신성은 믿음의 문제가 아니라, 접근 가능한 자원의 문제가 되었다.",
+            },
+          },
+          {
+            id: 2,
+            front: {
+              title: "EXTRACTION",
+              subtitle: "인디고와 제국",
+              desc: "18–19세기 인도에서는 영국 식민지 지배 아래 인디고 플랜테이션이 운영되었다.\n푸른 염료 인디고는 유럽의 산업과 패션을 지탱하는 핵심 자원이었으며,\n대규모 생산과 수출을 통해 글로벌 무역의 상징이 되었다.\n\n의미: 근대 산업, 글로벌 무역, 확장, 생산",
+            },
+            back: {
+              title: "EXPLOITATION",
+              subtitle: "보이지 않는 희생",
+              desc: "인디고는 유럽의 패션과 부를 물들이는 동안,\n현지 농민들에게는 빚과 폭력, 강제 노동을 의미하는 색으로 남았다.\n세계적 유행은 보이지 않는 지역적 희생 위에서 유지되었다.\n\n의미: 착취, 불균형, 식민지 폭력, 희생",
+            },
+          },
+          {
+            id: 3,
+            front: {
+              title: "BLUE COLLAR",
+              subtitle: "노동의 색",
+              desc: "산업혁명 이후 노동자 계층은 내구성과 실용성을 이유로 푸른 작업복을 착용했다.\n이러한 복장은 공장과 건설 현장에서 일하는 사람들을 상징하며,\n‘블루칼라’라는 용어로 계층을 구분하는 기준이 되었다.\n\n의미: 육체 노동, 성실함, 생산, 현장",
+            },
+            back: {
+              title: "STRATIFICATION",
+              subtitle: "계급의 표식",
+              desc: "같은 색의 작업복은 노동자를 효율적으로 식별하는 표시가 되었다.\n동시에 이는 사무직과 노동직을 구분하는 시각적 경계로 작동하며,\n계급 간의 위계를 자연스럽게 고정시켰다.\n\n의미: 계층화, 구분, 위계, 분리",
+            },
+          },
+          {
+            id: 4,
+            front: {
+              title: "NAVIGATION",
+              subtitle: "신뢰와 질서",
+              desc: "푸른색은 보호와 질서를 상징하며,\n경찰 제복과 공공 안전 시스템에서 반복적으로 사용되어 왔다.\n이 색은 시민을 안내하고 위험으로부터 지키는 존재로서\n권위와 신뢰를 시각화하는 역할을 해왔다.\n\n의미: 보호, 질서, 안전, 권위",
+            },
+            back: {
+              title: "BOUNDARY",
+              subtitle: "통제된 경계",
+              desc: "안내와 보호를 상징하는 공간은 겉보기에는 개방적이고 자유로워 보인다.\n그러나 실제로는 이동과 행동을 통제하며,\n보이지 않는 규칙과 감시를 통해 경계를 만들어낸다.\n\n의미: 통제, 경계, 감시, 억압",
+            },
+          },
+        ],
+      };
+
+      // === CONCLUSION TEXT DATA ===
+      const CONCLUSION_TEXT = {
+        red: `
+          <p>우리가 당연하게 받아들인 색의 의미는 어디에서 왔는가?</p>
+          <p>그 의미는 누구에 의해 만들어졌는가?</p>
+          <p>다른 시선으로 본다면, 이 장면은 무엇으로 보일까?</p>
+        `,
+        blue: `
+          <p>우리는 익숙한 색을 의심하지 않는다.</p>
+          <p>색에 붙은 의미는 자연스럽게 받아들여진다.</p>
+          <p>하지만 다른 시야로 보면, 같은 장면은 다른 이야기가 된다.</p>
+        `,
+      };
 
       const app = {
         isActive: false,
         lensSize: 200,
+        currentTheme: "red",
 
         init: function () {
-          this.renderIntroCards();
+          this.renderIntroCards(INTRO_DATA.red);
           this.renderStorySections();
+          this.renderConclusion(); // 초기 결론 텍스트 렌더링
           this.setupMouseTracking();
           this.initMusic();
           this.setupScrollObserver();
           this.initPathDrawing();
         },
 
-        renderIntroCards: function () {
+        switchTheme: function (theme) {
+          if (this.currentTheme === theme) return;
+          this.currentTheme = theme;
+          const body = document.body;
+
+          if (theme === "blue") {
+            body.classList.add("theme-blue");
+            document.getElementById("main-title").textContent = "Blue";
+            document.getElementById("main-subtitle").textContent =
+              "하단 버튼을 눌러 파란색을 제거하세요.";
+            this.renderIntroCards(INTRO_DATA.blue);
+          } else {
+            body.classList.remove("theme-blue");
+            document.getElementById("main-title").textContent = "Red";
+            document.getElementById("main-subtitle").textContent =
+              "하단 버튼을 눌러 빨간색을 제거하세요.";
+            this.renderIntroCards(INTRO_DATA.red);
+          }
+
+          this.renderStorySections();
+          this.renderConclusion(); // 테마 변경 시 결론 텍스트 업데이트
+
+          if (this.isActive) {
+            this.toggleFilter();
+          }
+
+          const dot = document.getElementById("global-dot");
+          dot.style.backgroundColor =
+            getComputedStyle(body).getPropertyValue("--theme-color");
+        },
+
+        renderConclusion: function () {
+          const container = document.querySelector(".conclusion-text");
+          // 텍스트 교체 (애니메이션 재시작을 위해 클래스 제거 후 다시 추가)
+          container.classList.remove("visible");
+          container.innerHTML = CONCLUSION_TEXT[this.currentTheme];
+
+          // 약간의 딜레이 후 visible 추가 (스크롤 위치에 있다면)
+          setTimeout(() => {
+            const rect = document
+              .getElementById("conclusion-section")
+              .getBoundingClientRect();
+            if (rect.top < window.innerHeight) {
+              container.classList.add("visible");
+            }
+          }, 100);
+        },
+
+        renderIntroCards: function (data) {
           const container = document.getElementById("gallery");
-          let html = "";
-          CARDS_DATA.forEach((card) => {
-            html += `
-              <div class="card-wrapper" id="card-${card.id}">
-                  <img src="${card.img}" class="card-image" alt="Card ${card.id}">
-                  <video src="${card.video}" class="card-video" loop muted playsinline webkit-playsinline></video>
-              </div>
-            `;
-          });
-          container.innerHTML = html;
+          container.classList.add("fade-out");
+
+          setTimeout(() => {
+            let html = "";
+            data.forEach((card, index) => {
+              const delay = (index + 1) * 0.1;
+
+              let hiddenContentTag = "";
+              if (card.type === "video") {
+                hiddenContentTag = `<video src="${card.content}" class="card-hidden-content" loop muted playsinline webkit-playsinline></video>`;
+              } else {
+                hiddenContentTag = `<img src="${card.content}" class="card-hidden-content" alt="Hidden content">`;
+              }
+
+              html += `
+                <div class="card-wrapper" style="animation-delay: ${delay}s">
+                    <img src="${card.img}" class="card-image" alt="Card ${card.id}">
+                    ${hiddenContentTag}
+                </div>
+              `;
+            });
+            container.innerHTML = html;
+            container.classList.remove("fade-out");
+
+            if (this.isActive) this.forcePlayVideos();
+          }, 500);
         },
 
         renderStorySections: function () {
-          STORY_DATA.forEach((story) => {
-            const section = document.getElementById(`story-${story.id}`);
+          const resources = STORY_RESOURCES[this.currentTheme];
+          const textData = STORY_TEXT[this.currentTheme];
+
+          textData.forEach((text, index) => {
+            const res = resources[index];
+            const section = document.getElementById(`story-${text.id}`);
+            const initialContent = text.front;
+
+            let rightContentTag = "";
+            if (res.rightType === "video") {
+              rightContentTag = `<video src="${res.rightContent}" loop muted autoplay playsinline></video>`;
+            } else {
+              rightContentTag = `<img src="${res.rightContent}" alt="Blue Content">`;
+            }
+
             section.innerHTML = `
               <div class="story-grid">
-                <div class="text-group text-top-left">
-                  <h2 class="story-title">${story.front.title}</h2>
-                  <div class="separator-line"></div>
-                  <h3 class="story-subtitle">${story.front.subtitle}</h3>
-                  <p class="story-desc">${story.front.desc}</p>
-                </div>
-                <div class="card-stack" onclick="app.toggleStoryMode(${story.id})">
-                  <div class="story-card card-red">
-                    <img src="${story.img}" alt="Image ${story.id}">
+                <div class="double-card-container" onclick="app.toggleStoryContent(${text.id})">
+                  <div class="story-card card-left">
+                    <img src="${res.leftImg}" alt="Left Card ${text.id}">
                   </div>
-                  <div class="story-card card-blue">
-                    <video src="${story.video}" loop muted autoplay playsinline></video>
+                  <div class="story-card card-right">
+                    ${rightContentTag}
                   </div>
                 </div>
-                <div class="text-group text-bottom-right">
-                  <h2 class="story-title">${story.back.title}</h2>
+                
+                <div class="text-group" id="text-group-${text.id}" data-state="front">
+                  <h2 class="story-title">${initialContent.title}</h2>
                   <div class="separator-line"></div>
-                  <h3 class="story-subtitle">${story.back.subtitle}</h3>
-                  <p class="story-desc">${story.back.desc}</p>
+                  <h3 class="story-subtitle">${initialContent.subtitle}</h3>
+                  <p class="story-desc">${initialContent.desc}</p>
                 </div>
               </div>
             `;
           });
+        },
+
+        toggleStoryContent: function (id) {
+          const textGroup = document.getElementById(`text-group-${id}`);
+          const currentState = textGroup.getAttribute("data-state");
+          const data = STORY_TEXT[this.currentTheme].find((t) => t.id === id);
+
+          textGroup.classList.add("switching");
+
+          setTimeout(() => {
+            let nextContent;
+            let nextState;
+
+            if (currentState === "front") {
+              nextContent = data.back;
+              nextState = "back";
+            } else {
+              nextContent = data.front;
+              nextState = "front";
+            }
+
+            textGroup.querySelector(".story-title").textContent =
+              nextContent.title;
+            textGroup.querySelector(".story-subtitle").textContent =
+              nextContent.subtitle;
+            textGroup.querySelector(".story-desc").textContent =
+              nextContent.desc;
+
+            textGroup.setAttribute("data-state", nextState);
+            textGroup.classList.remove("switching");
+          }, 500);
         },
 
         setupScrollObserver: function () {
@@ -642,75 +1071,63 @@
           document.querySelectorAll(".story-section").forEach((section) => {
             observer.observe(section);
           });
-          
+
           const conclusionObs = new IntersectionObserver(
             (entries) => {
               entries.forEach((entry) => {
                 if (entry.isIntersecting) {
-                  entry.target.querySelector('.conclusion-text').classList.add("visible");
+                  entry.target
+                    .querySelector(".conclusion-text")
+                    .classList.add("visible");
                 }
               });
-            }, { threshold: 0.2 }
+            },
+            { threshold: 0.2 }
           );
-          
+
           const concSection = document.getElementById("conclusion-section");
-          if(concSection) conclusionObs.observe(concSection);
+          if (concSection) conclusionObs.observe(concSection);
         },
 
-        initPathDrawing: function() {
-          const paths = document.querySelectorAll('.scroll-draw');
-          
-          paths.forEach(path => {
+        initPathDrawing: function () {
+          const paths = document.querySelectorAll(".scroll-draw");
+
+          paths.forEach((path) => {
             const length = path.getTotalLength();
             path.style.strokeDasharray = length;
             path.style.strokeDashoffset = length;
           });
 
-          window.addEventListener('scroll', () => {
+          window.addEventListener("scroll", () => {
             this.updatePathDrawing(paths);
           });
-          
           this.updatePathDrawing(paths);
         },
 
-        updatePathDrawing: function(paths) {
-          const startTrigger = window.innerHeight; 
+        updatePathDrawing: function (paths) {
+          const startTrigger = window.innerHeight;
           const scrollHeight = document.body.scrollHeight - window.innerHeight;
           const scrollTop = window.scrollY;
-          
-          // 라인 드로잉 길이: 400vh
-          const drawSectionHeight = window.innerHeight * 4; 
-          
+          const drawSectionHeight = window.innerHeight * 4;
           const currentProgress = scrollTop - startTrigger;
           const scrollBuffer = window.innerHeight * 0.5;
 
           let progress = (currentProgress + scrollBuffer) / drawSectionHeight;
-          
           if (progress < 0) progress = 0;
           if (progress > 1) progress = 1;
 
-          paths.forEach(path => {
+          paths.forEach((path) => {
             const length = path.getTotalLength();
             const drawLength = length * progress;
             path.style.strokeDashoffset = length - drawLength;
           });
 
-          // SVG 밖의 점(#global-dot) 제어
-          const dot = document.getElementById('global-dot');
-          if(progress >= 0.99) {
-            dot.classList.add('visible');
+          const dot = document.getElementById("global-dot");
+          if (progress >= 0.99) {
+            dot.classList.add("visible");
           } else {
-            dot.classList.remove('visible');
+            dot.classList.remove("visible");
           }
-        },
-
-        toggleStoryMode: function (id) {
-          const section = document.getElementById(`story-${id}`);
-          const currentMode = section.getAttribute("data-mode");
-          section.setAttribute(
-            "data-mode",
-            currentMode === "red" ? "blue" : "red"
-          );
         },
 
         initMusic: function () {
@@ -719,16 +1136,26 @@
           const playPromise = audio.play();
           if (playPromise !== undefined) {
             playPromise.catch((error) => {
-              document.addEventListener("click", () => { audio.play(); }, { once: true });
+              document.addEventListener(
+                "click",
+                () => {
+                  audio.play();
+                },
+                { once: true }
+              );
             });
           }
         },
 
         forcePlayVideos: function () {
-          const videos = document.querySelectorAll("#intro-section video");
+          const videos = document.querySelectorAll(
+            "#intro-section .card-hidden-content"
+          );
           videos.forEach((vid) => {
-            vid.muted = true;
-            vid.play().catch((e) => {});
+            if (vid.tagName === "VIDEO") {
+              vid.muted = true;
+              vid.play().catch((e) => {});
+            }
           });
         },
 
@@ -747,9 +1174,9 @@
             btn.classList.remove("active");
             lens.style.display = "none";
             body.classList.remove("filter-active");
-            document.querySelectorAll("#intro-section .card-video").forEach((video) => {
-                video.style.clipPath = `circle(0px at 0 0)`;
-              });
+            document.querySelectorAll(".card-hidden-content").forEach((el) => {
+              el.style.clipPath = `circle(0px at 0 0)`;
+            });
           }
         },
 
@@ -762,15 +1189,23 @@
             lens.style.left = mx + "px";
             lens.style.top = my + "px";
 
-            const cards = document.querySelectorAll("#intro-section .card-wrapper");
+            const cards = document.querySelectorAll(
+              "#intro-section .card-wrapper"
+            );
             const radius = this.lensSize / 2;
+
             cards.forEach((card) => {
               const rect = card.getBoundingClientRect();
-              const video = card.querySelector(".card-video");
-              if (rect.top < window.innerHeight && rect.bottom > 0) {
+              const hiddenContent = card.querySelector(".card-hidden-content");
+
+              if (
+                hiddenContent &&
+                rect.top < window.innerHeight &&
+                rect.bottom > 0
+              ) {
                 const localX = mx - rect.left;
                 const localY = my - rect.top;
-                video.style.clipPath = `circle(${radius}px at ${localX}px ${localY}px)`;
+                hiddenContent.style.clipPath = `circle(${radius}px at ${localX}px ${localY}px)`;
               }
             });
           });
@@ -778,12 +1213,10 @@
       };
 
       window.onload = function () {
-        // 브라우저가 스크롤 위치를 기억하지 못하게 하고 맨 위로 강제 이동
         if (history.scrollRestoration) {
           history.scrollRestoration = "manual";
         }
         window.scrollTo(0, 0);
-        
         app.init();
       };
     </script>
